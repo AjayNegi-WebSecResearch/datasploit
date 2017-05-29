@@ -1,29 +1,24 @@
 # from django.shortcuts import render_to_response
-from django.shortcuts import render
-from .models import whoisinfo_db, domain_censys_db, domain_dnsrecords_db, domain_pagelinks_db, domain_shodans_db, \
-    domain_subdomains_db, domain_wappalyzers_db, domain_wikileaks_db, domain_zoomeyes_db
-from domain_dnsrecords import parse_dns_records, fetch_dns_records
-from domain_pagelinks import pagelinks
-from domain_shodan import shodandomainsearch
-from domain_subdomains import check_and_append_subdomains, subdomains, find_subdomains_from_wolfram, \
-    subdomains_from_netcraft, subdomain_list
-from domain_wappalyzer import wappalyzeit
-from domain_whois import whoisnew
-from domain_wikileaks import wikileaks
-from domain_zoomeye import search_zoomeye
-from domain_censys import view, censys_search, censys_list
-from django.http import HttpResponse
-from ipwhois import IPWhois
-from ip_shodan import domaintoip
 import json
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
+from django.shortcuts import render
+from ipwhois import IPWhois
+from domain_censys import censys_search, censys_list
+from domain_dnsrecords import fetch_dns_records
+from domain_pagelinks import pagelinks
+from domain_shodan import shodandomainsearch
+from domain_subdomains import subdomains, subdomains_from_netcraft, subdomain_list
+from domain_wappalyzer import wappalyzeit
+from domain_wikileaks import wikileaks
+from domain_zoomeye import search_zoomeye
+from ip_shodan import domaintoip
+from .models import whoisinfo_db, domain_censys_db, domain_dnsrecords_db, domain_pagelinks_db, domain_shodans_db, \
+    domain_subdomains_db, domain_wappalyzers_db, domain_wikileaks_db, domain_zoomeyes_db
 
 dict_to_apend = {}
 
 
 def index(request):
-
     return render(request, 'datasploit/index.html')
 
 
@@ -31,32 +26,39 @@ def domain_dns_records(domain):
     try:
         soa_records = fetch_dns_records(domain, 'SOA')
         print soa_records
-        save_data = domain_dnsrecords_db(soa_records=soa_records)
+        soa_out = ("".join(map(str, soa_records)))
+        save_data = domain_dnsrecords_db(soa_records=soa_out)
         save_data.save()
 
         mx_records = fetch_dns_records(domain, 'MX')
-        save_data = domain_dnsrecords_db(mx_records=mx_records)
+        mx_out = ("".join(map(str, mx_records)))
+        save_data = domain_dnsrecords_db(mx_records=mx_out)
         save_data.save()
 
         txt_records = fetch_dns_records(domain, 'TXT')
-        save_data = domain_dnsrecords_db(txt_records=txt_records)
+        txt_out = ("".join(map(str, txt_records)))
+        save_data = domain_dnsrecords_db(txt_records=txt_out)
         save_data.save()
 
         a_records = fetch_dns_records(domain, 'A')
-        save_data = domain_dnsrecords_db(a_records=a_records)
+        a_out = ("".join(map(str, a_records)))
+        save_data = domain_dnsrecords_db(a_records=a_out)
         save_data.save()
 
         name_server_records = fetch_dns_records(domain, 'NS')
-        save_data = domain_dnsrecords_db(name_server_records=name_server_records)
+        name_out = ("".join(map(str, name_server_records)))
+        save_data = domain_dnsrecords_db(name_server_records=name_out)
         save_data.save()
 
         cname_records = fetch_dns_records(domain, 'CNAME')
-        save_data = domain_dnsrecords_db(cname_records=cname_records)
+        cname_out = ("".join(map(str, cname_records)))
+        save_data = domain_dnsrecords_db(cname_records=cname_out)
         save_data.save()
 
         aaaa_records = fetch_dns_records(domain, 'AAAA')
         print aaaa_records
-        save_data = domain_dnsrecords_db(aaaa_records=aaaa_records)
+        aaaa_out = ("".join(map(str, aaaa_records)))
+        save_data = domain_dnsrecords_db(aaaa_records=aaaa_out)
         save_data.save()
 
     except Exception as error:
@@ -124,10 +126,11 @@ def domain_wappalyzer(domain):
     try:
         targeturl = "http://" + domain
         data = wappalyzeit(targeturl)
-        save_data = domain_wappalyzers_db(domain_wappalyzer=(data))
+        data_out = ("".join(map(str, data)))
+        save_data = domain_wappalyzers_db(domain_wappalyzer=(data_out))
         save_data.save()
     except:
-        data = " HTTP connection was unavailable"
+        data = "HTTP connection was unavailable"
         save_data = domain_wappalyzers_db(domain_wappalyzer=(data))
         save_data.save()
     try:
@@ -152,8 +155,10 @@ def domain_whois(domain):
         range_data = out["nets"][0]['range']
         state_data = out["nets"][0]['range']
 
+        out_email = ("".join(map(str, emails_data)))
+
         save_data = whoisinfo_db(ip=(ip_addr), sh_domain=(domain), city=(city_data), country=(country_data),
-                                 description=(description_data), emails=(emails_data), name=(name_data),
+                                 description=(description_data), emails=(out_email), name=(name_data),
                                  range=(range_data), state=(state_data))
         save_data.save()
     except Exception as error:
@@ -210,7 +215,7 @@ def domain_censys(domain):
         print error
 
 
-def delete_all():
+def run_dat(request):
     whoisinfo_db.objects.all().delete()
     domain_censys_db.objects.all().delete()
     domain_dnsrecords_db.objects.all().delete()
@@ -220,10 +225,6 @@ def delete_all():
     domain_wappalyzers_db.objects.all().delete()
     domain_wikileaks_db.objects.all().delete()
     domain_zoomeyes_db.objects.all().delete()
-
-
-def run_dat(request):
-    delete_all()
 
     if request.method == 'GET':
         search_text = request.GET.get('search_text')
