@@ -44,4 +44,14 @@ Options:
 ## Detailed Tool Documentation:
 > [http://datasploit.readthedocs.io/en/latest/](http://datasploit.readthedocs.io/en/latest/)
 
+## Up and Running Datasploit GUI
+```
+    pip install -r requirements.txt
+    python manage.py collectstatic
+    python manage.py makemigrations
+    python manage.py migrate
+    python manage.py runserver 
+
+```
+
 
