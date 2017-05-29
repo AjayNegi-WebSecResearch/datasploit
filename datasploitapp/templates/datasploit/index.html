@@ -1,0 +1,84 @@
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" class="fa-events-icons-ready">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="/static/bootstrap.min.css">
+    <link href="/static/css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="/static/local.css">
+    <link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="/static/nv.d3.min.css">
+    <link rel="icon" href="/datasploit.png">
+
+    <title>DataSploit</title>
+
+<body>
+<div class="/static/navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container" id="topbar-content">
+
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+    </div>
+</div>
+<div id="content">
+    <div class="index-bar">
+        <div class="container">
+            <div class="col-md-10 col-md-offset-1">
+                <div class="text-center title">
+                    <img width="55%" class="paper" src="/static/datasploit.png">
+                </div>
+                <form method="get" action="/rundata/">
+                    <div class="input-group">
+                        <input type="text" id="search" name="search_text" class="form-control input-lg"
+                               value="{{ search_text }}" aria-label="..." autofocus="" action="">
+                        <div class="input-group-btn">
+                            <button type="submit" class="btn btn-lg btn-primary">
+                                Search <span class="caretpadding"></span>
+                            </button>
+
+                        </div>
+                    </div>
+                </form>
+                <div class="index-text"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <div class="pull-right">
+            <ul>
+                <li class="right"></li>
+                <li class="right"><a href="">{{ user.get_username }}</a></li>
+                <ul>
+                </ul>
+            </ul>
+        </div>
+        <ul>
+            <li><a href="http://www.datasploit.info/">About Datasploit</a></li>
+            <li><a href="">Contact Us</a></li>
+            <li><a href="">Terms of Service</a></li>
+        </ul>
+        <br>
+    </div>
+</footer>
+
+<script charset="utf-8" src="/static/jquery-1.11.3.min.js.download"></script>
+<script charset="utf-8" src="/static/bootstrap.min.js.download"></script>
+<script charset="utf-8" src="/static/d3.min.js.download"></script>
+<script charset="utf-8" src="/static/nv.d3.min.js.download"></script>
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+
+
+</script>
+</body>
+</html>

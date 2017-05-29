@@ -1,0 +1,74 @@
+{% extends 'datasploit/header2.html' %}
+{% block body %}
+
+<div class="container">
+    <row>
+        <div class="col-md-12 right-pane">
+            <ul class="nav-topmenu">
+                <li class="">
+                    <a class="activelink" href="/whois">Whois Data</a></li>
+                <li class="">
+                    <a href="/dnsrecords_url/">DNS Records</a></li>
+                <li class="">
+                    <a href="/pagelink/">Pagelinks</a></li>
+                <li class="">
+                    <a href="/shodan/">Shodan Data</a></li>
+                <li class="">
+                    <a href="/subdomains">Subdomains</a></li>
+                <li class="">
+                    <a href="/wappalyzer/">Wappalyzer</a></li>
+                <li class="">
+                    <a href="/wikileaks/">Wikileaks Data</a></li>
+                <li class="">
+                    <a href="/zoomeye/">Zoomeye Data</a></li>
+                <li class="active">
+                    <a href="/censys/">Censys Data</a></li>
+            </ul>
+            <div id="alerts">
+            </div>
+            <div class="col-lg-12">
+                <a href="/admin/datasploitapp/domain_pagelinks_db/export/?" class="btn btn-info" role="button"
+                   style="position: absolute;
+    right: 0px; top: 20px" type="button">Download Censys Data</a>
+                <div>
+                    <div id="results">
+
+                        <div class="result">
+                            <div class="result-metadata">
+                                <ul>
+                                    {% for data in censys_data %}
+
+                                    <pre>{{data.domain_censys_data}}</pre>
+
+                                    {% endfor %}
+                                </ul>
+
+                            </div>
+                        </div>
+                        <nav>
+                            <nav>
+                                <ul class="pager">
+                                    {% if censys_data.has_previous %}
+                                    <li class="previous"><a
+                                            href="?page={{ censys_data.previous_page_number }}"><span
+                                            aria-hidden="true">&larr;</span> Previous</a></li>
+                                    {% endif %}
+
+
+                                    <span class="current">
+                                            Page {{ censys_data.number }} of {{ censys_data.paginator.num_pages }}.
+                                        </span>
+                                    {% if censys_data.has_next %}
+                                    <li class="next"><a href="?page={{ censys_data.next_page_number }}">Next <span
+                                            aria-hidden="true">&rarr;</span></a></li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </row>
+</div>
+{% endblock %}

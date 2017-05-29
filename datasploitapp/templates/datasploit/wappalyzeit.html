@@ -1,0 +1,77 @@
+{% extends 'datasploit/header2.html' %}
+{% block body %}
+
+<div class="container">
+
+    <row>
+
+        <div class="col-md-12 right-pane">
+            <ul class="nav-topmenu">
+                <li class="">
+                    <a class="activelink" href="/whois">Whois Data</a></li>
+                <li class="">
+                    <a href="/dnsrecords_url/">DNS Records</a></li>
+                <li class="">
+                    <a href="/pagelink/">Pagelinks</a></li>
+                <li class="">
+                    <a href="/shodan/">Shodan Data</a></li>
+                <li class="">
+                    <a href="/subdomains">Subdomains</a></li>
+                <li class="active">
+                    <a href="/wappalyzer/">Wappalyzer</a></li>
+                <li class="">
+                    <a href="/wikileaks/">Wikileaks Data</a></li>
+                <li class="">
+                    <a href="/zoomeye/">Zoomeye Data</a></li>
+                <li class="">
+                    <a href="/censys/">Censys Data</a></li>
+            </ul>
+            <div id="alerts">
+            </div>
+            <div class="col-lg-12">
+                <a href="/admin/datasploitapp/domain_pagelinks_db/export/?" class="btn btn-info" role="button"
+                   style="position: absolute;
+    right: 0px; top: 20px" type="button">Download Pagelinks Data</a>
+                <div>
+                    <div id="results">
+
+                        <div class="result">
+                            <div class="result-metadata">
+                                <h9>Wappalyzer Data :</h9>
+                                <ul>
+                                    {% for data in wappalyzeit_data %}
+                                    <li>{{data.domain_wappalyzer}}</li>
+                                    {% endfor %}
+                                </ul>
+
+                            </div>
+                        </div>
+                        <nav>
+                            <nav>
+                                <ul class="pager">
+                                    {% if wappalyzeit_data.has_previous %}
+                                    <li class="previous"><a
+                                            href="?page={{ wappalyzeit_data.previous_page_number }}"><span
+                                            aria-hidden="true">&larr;</span> Previous</a></li>
+                                    {% endif %}
+
+
+                                    <span class="current">
+                                            Page {{ wappalyzeit_data.number }} of {{ wappalyzeit_data.paginator.num_pages }}.
+                                        </span>
+                                    {% if wappalyzeit_data.has_next %}
+                                    <li class="next"><a href="?page={{ wappalyzeit_data.next_page_number }}">Next
+                                        <span
+                                                aria-hidden="true">&rarr;</span></a></li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </row>
+</div>
+
+    {% endblock %}

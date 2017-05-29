@@ -1,0 +1,108 @@
+{% extends 'datasploit/header2.html' %}
+{% block body %}
+
+<div class="container">
+
+    <row>
+        <div class="col-md-12 right-pane">
+            <ul class="nav-topmenu">
+                <li class="">
+                    <a class="activelink" href="/whois">Whois Data</a></li>
+                <li class="active">
+                    <a href="/dnsrecords_url/">DNS Records</a></li>
+                <li class="">
+                    <a href="/pagelink/">Pagelinks</a></li>
+                <li class="">
+                    <a href="/shodan">Shodan Data</a></li>
+                <li class="">
+                    <a href="/subdomain">Subdomains</a></li>
+                <li class="">
+                    <a href="/wappalyzer">Wappalyzer</a></li>
+                <li class="">
+                    <a href="/wikileaks=asdfs">Wikileaks Data</a></li>
+                <li class="">
+                    <a href="/zoomeye">Zoomeye Data</a></li>
+                <li class="">
+                    <a href="/censys/">Censys Data</a></li>
+            </ul>
+            <div id="alerts">
+            </div>
+            <div class="col-lg-12">
+                <a href="/admin/datasploitapp/domain_dnsrecords_db/export/?" class="btn btn-info" role="button"
+                   style="position: absolute;
+    right: 0px; top: 20px" type="button">DNS Record Data</a>
+                <div>
+                    <div id="results">
+                        <div class="result">
+                            <div class="result-metadata">
+                                <h9>SOA Records :</h9>
+                                <ul>
+                                    {% for data in domain_dnsrecords %}
+                                    <pre>{{data.soa_records}}</pre>
+                                    {% endfor %}
+                                </ul>
+                                <h9>MX Records :</h9>
+                                <ul>
+                                    {% for data in domain_dnsrecords %}
+                                    <pre>{{data.mx_records}}</pre>
+                                    {% endfor %}
+                                </ul>
+                                <h9>TXT Records :</h9>
+                                <ul>
+                                    {% for data in domain_dnsrecords %}
+                                    <pre>{{data.txt_records}}</pre>
+                                    {% endfor %}
+                                </ul>
+                                <h9>A Records :</h9>
+                                <ul>
+                                    {% for data in domain_dnsrecords %}
+                                    <pre>{{data.a_records}}</pre>
+                                    {% endfor %}
+                                </ul>
+                                <h9>Name Server Records :</h9>
+                                <ul>
+                                    {% for data in domain_dnsrecords %}
+                                    <pre>{{data.name_server_records}}</pre>
+                                    {% endfor %}
+                                </ul>
+                                <h9>CNAME Records :</h9>
+                                <ul>
+                                    {% for data in domain_dnsrecords %}
+                                    <pre>{{data.cname_records}}</pre>
+                                    {% endfor %}
+                                </ul>
+                                <h9>AAAA Records :</h9>
+                                <ul>
+                                    {% for data in domain_dnsrecords %}
+                                    <pre>{{data.aaaa_records}}</pre>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <nav>
+                        <nav>
+                            <ul class="pager">
+                                {% if domain_dnsrecords.has_previous %}
+                                <li class="previous"><a
+                                        href="?page={{ domain_dnsrecords.previous_page_number }}"><span
+                                        aria-hidden="true">&larr;</span> Previous</a></li>
+                                {% endif %}
+
+
+                                <span class="current">
+                                            Page {{ domain_dnsrecords.number }} of {{ domain_dnsrecords.paginator.num_pages }}.
+                                        </span>
+                                {% if domain_dnsrecords.has_next %}
+                                <li class="next"><a href="?page={{ shodan_data.next_page_number }}">Next <span
+                                        aria-hidden="true">&rarr;</span></a></li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </row>
+</div>
+{% endblock %}
