@@ -16,7 +16,8 @@ class whoisinfo_db(models.Model):
     state = models.TextField(blank=True)
 
     def __unicode__(self):
-        return self.city + ' ' + self.country + ' ' + self.description + ' ' + self.emails + ' ' + self.name + ' ' + self.range + ' ' + self.state
+        return self.city + ' ' + self.country + ' ' + self.description + ' ' + self.emails + ' ' + self.name + ' ' + \
+               self.range + ' ' + self.state + ' ' + self.sh_domain + ' ' + self.ip
 
 
 class domain_pagelinks_db(models.Model):
