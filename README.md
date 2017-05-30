@@ -42,7 +42,7 @@ Options:
 
 
 ## Detailed Tool Documentation:
-> [http://datasploit.readthedocs.io/en/latest/](http://datasploit.readthedocs.io/en/latest/)
+> [https://raw.githubusercontent.com/anandtiwarics/datasploit/master/GUI%20Photo/datasploit.PNG)
 
 ## Up and Running Datasploit GUI
 ```
