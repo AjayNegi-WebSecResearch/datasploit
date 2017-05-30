@@ -42,7 +42,7 @@ Options:
 
 
 ## Detailed Tool Documentation:
-> [https://raw.githubusercontent.com/anandtiwarics/datasploit/master/GUI%20Photo/datasploit.PNG)
+> [http://datasploit.readthedocs.io/en/latest/](http://datasploit.readthedocs.io/en/latest/)
 
 ## Up and Running Datasploit GUI
 ```
@@ -53,5 +53,5 @@ Options:
     python manage.py runserver
 
 ```
-![alt text](https://raw.githubusercontent.com/anandtiwarics/datasploit/master/datasploit.PNG)
+![alt text](https://raw.githubusercontent.com/anandtiwarics/datasploit/master/GUI%20Photo/datasploit.PNG)
 
