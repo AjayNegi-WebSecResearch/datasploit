@@ -60,12 +60,6 @@ Options:
 ![alt text](https://raw.githubusercontent.com/anandtiwarics/datasploit/master/GUI%20Photo/whois.png)
 
 
-![alt text](https://raw.githubusercontent.com/anandtiwarics/datasploit/master/GUI%20Photo/dns.png)
-
-
-![alt text](https://raw.githubusercontent.com/anandtiwarics/datasploit/master/GUI%20Photo/pagelinks.png)
-
-
 ![alt text](https://raw.githubusercontent.com/anandtiwarics/datasploit/master/GUI%20Photo/shodan.png)
 
 
