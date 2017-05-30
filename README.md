@@ -57,9 +57,6 @@ Options:
 ![alt text](https://raw.githubusercontent.com/anandtiwarics/datasploit/master/GUI%20Photo/datasploit.PNG)
 
 
-![alt text](https://raw.githubusercontent.com/anandtiwarics/datasploit/master/GUI%20Photo/whois.png)
-
-
 ![alt text](https://raw.githubusercontent.com/anandtiwarics/datasploit/master/GUI%20Photo/shodan.png)
 
 
@@ -68,6 +65,4 @@ Options:
 
 ![alt text](https://raw.githubusercontent.com/anandtiwarics/datasploit/master/GUI%20Photo/wikileaks.png)
 
-
-![alt text](https://raw.githubusercontent.com/anandtiwarics/datasploit/master/GUI%20Photo/zoomeye.png)
 
