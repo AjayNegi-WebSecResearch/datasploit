@@ -32,11 +32,12 @@
                 <div>
                     <div class="search-result">
                         {% for data in shodan_data %}
-                        <pre class="detail">{{data.host}}</pre>
-                        <pre class="detail">{{data.domain}}</pre>
+                        <code class="detail">{{data.host}}</code>
+                        <code class="detail">{{data.domain}}</code>
                         <pre class="detail">Port:{{data.port}}</pre>
-                        <pre class="detail">{{data.data}}</pre>
-                        <pre class="detail">{{data.location}}</pre>
+                        <pre class="detail"><code>{{data.data}}</code></pre>
+                        <div class="">
+                        <pre class="detail">{{data.location}}</pre></div>
                         <br/>
                         {% endfor %}
                     </div>

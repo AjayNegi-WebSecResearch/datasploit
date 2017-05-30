@@ -41,10 +41,9 @@
                             {% for data in subdomain_data %}
                             <tbody>
                             <tr>
-                                <pre>{{data.domain_subdomain}}</pre>
+                                <code>{{data.domain_subdomain}}<br></code>
                             </tr>
                             </tbody>
-
                         </table>
                         {% endfor %}
                     </div>
@@ -52,7 +51,7 @@
                         <nav>
                             <ul class="pager">
                                 {% if subdomain_data.has_previous %}
-                                <li class="previous"><a href="?page={{ zoomeye_data.previous_page_number }}"><span
+                                <li class="previous"><a href="?page={{ subdomain_data.previous_page_number }}"><span
                                         aria-hidden="true">&larr;</span> Previous</a></li>
                                 {% endif %}
 
@@ -61,7 +60,7 @@
                                             Page {{ subdomain_data.number }} of {{ subdomain_data.paginator.num_pages }}.
                                         </span>
                                 {% if subdomain_data.has_next %}
-                                <li class="next"><a href="?page={{ zoomeye_data.next_page_number }}">Next <span
+                                <li class="next"><a href="?page={{ subdomain_data.next_page_number }}">Next <span
                                         aria-hidden="true">&rarr;</span></a></li>
                                 {% endif %}
                             </ul>
