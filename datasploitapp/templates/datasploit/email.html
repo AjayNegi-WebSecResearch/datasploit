@@ -57,18 +57,18 @@
                         <nav>
                             <nav>
                                 <ul class="pager">
-                                    {% if wappalyzeit_data.has_previous %}
+                                    {% if email_data.has_previous %}
                                     <li class="previous"><a
-                                            href="?page={{ wappalyzeit_data.previous_page_number }}"><span
+                                            href="?page={{ email_data.previous_page_number }}"><span
                                             aria-hidden="true">&larr;</span> Previous</a></li>
                                     {% endif %}
 
 
                                     <span class="current">
-                                            Page {{ wappalyzeit_data.number }} of {{ wappalyzeit_data.paginator.num_pages }}.
+                                            Page {{ email_data.number }} of {{ email_data.paginator.num_pages }}.
                                         </span>
-                                    {% if wappalyzeit_data.has_next %}
-                                    <li class="next"><a href="?page={{ wappalyzeit_data.next_page_number }}">Next
+                                    {% if email_data.has_next %}
+                                    <li class="next"><a href="?page={{ email_data.next_page_number }}">Next
                                         <span
                                                 aria-hidden="true">&rarr;</span></a></li>
                                     {% endif %}

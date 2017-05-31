@@ -340,6 +340,15 @@ def run_dat(request):
 
 def email_url(request):
     email_data = email_fullcontact_db.objects.all()
+    paginator = Paginator(email_data, 20)
+
+    page = request.GET.get('page')
+    try:
+        email_data = paginator.page(page)
+    except PageNotAnInteger:
+        email_data = paginator.page(1)
+    except EmptyPage:
+        email_data = paginator.page(paginator.num_pages)
 
     return render(request, 'datasploit/email.html', {'email_data': email_data})
 
