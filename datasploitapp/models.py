@@ -90,3 +90,11 @@ class domain_censys_db(models.Model):
 
     def __unicode__(self):
         return self.domain_censys_data
+
+
+class email_fullcontact_db(models.Model):
+    name = models.TextField(blank=True)
+    organizations = models.TextField(blank=True)
+    social_profile = models.TextField(blank=True)
+    other_details = models.TextField(blank=True)
+    photos = models.TextField(blank=True)

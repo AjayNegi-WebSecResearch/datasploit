@@ -12,8 +12,12 @@ from domain_wappalyzer import wappalyzeit
 from domain_wikileaks import wikileaks
 from domain_zoomeye import search_zoomeye
 from ip_shodan import domaintoip
+from email_fullcontact import fullcontact
 from .models import whoisinfo_db, domain_censys_db, domain_dnsrecords_db, domain_pagelinks_db, domain_shodans_db, \
-    domain_subdomains_db, domain_wappalyzers_db, domain_wikileaks_db, domain_zoomeyes_db
+    domain_subdomains_db, domain_wappalyzers_db, domain_wikileaks_db, domain_zoomeyes_db, email_fullcontact_db
+from email_basic_checks import basic_checks
+
+import re
 
 dict_to_apend = {}
 
@@ -215,6 +219,83 @@ def domain_censys(domain):
         print error
 
 
+def email_full(email):
+    try:
+        data = fullcontact(email)
+        if data.get("status", "") == 200:
+            if data.get("contactInfo", "") != "":
+                n_dat = data.get("contactInfo", "").get('fullName', '')
+                save_data = email_fullcontact_db(name=(n_dat))
+                save_data.save()
+        # print "\nOrganizations:"
+        for x in data.get("organizations", ""):
+            if x.get('isPrimary', '') == True:
+                primarycheck = " - Primary"
+            else:
+                primarycheck = ""
+            if x.get('endDate', '') == '':
+                org_dat = (
+                    x.get('title', ''), x.get('name', ''), x.get('startDate', ''), primarycheck)
+                org_out = ("".join(map(str, org_dat)))
+                save_data = email_fullcontact_db(organizations=(org_out))
+                save_data.save()
+            else:
+                org2_dat = (
+                    x.get('name', ''), x.get('startDate', ''), x.get('endDate', ''), primarycheck)
+                org2_out = ("".join(map(str, org2_dat)))
+                save_data = email_fullcontact_db(organizations=(org2_out))
+                save_data.save()
+        if data.get("contactInfo", "") != "":
+            if data.get("contactInfo", "").get('websites', '') != "":
+                # print "\nWebsite(s):"
+                for x in data.get("contactInfo", "").get('websites', ''):
+                    web_dat = x.get('url', '')
+                    save_data = email_fullcontact_db(name=(web_dat))
+                    save_data.save()
+            if data.get("contactInfo", "").get('chats', '') != "":
+                # print '\nChat Accounts'
+                for x in data.get("contactInfo", "").get('chats', ''):
+                    chat_dat = (x.get('handle', ''), x.get('client', ''))
+                    save_data = email_fullcontact_db(name=(chat_dat))
+                    save_data.save()
+
+        # print "\nSocial Profiles:"
+        for x in data.get("socialProfiles", ""):
+            # print "\t%s:" % x.get('type', '').upper()
+            for y in x.keys():
+                if y != 'type' and y != 'typeName' and y != 'typeId':
+                    soc_dat = (y, x.get(y, ''))
+                    soc_out = ("".join(map(str, soc_dat)))
+                    save_data = email_fullcontact_db(social_profile=(soc_out))
+                    save_data.save()
+                    # print ''
+
+        # print "Other Details:"
+        try:
+            if data.get("demographics", "") != "":
+                o1_dat = data.get("demographics", "").get('gender', '')
+                o2_dat = data.get("demographics", "").get('country', '')
+                o3_dat = data.get("demographics", "").get('locationGeneral', '')
+                # od1_out = ("".join(map(str, o1_dat)))
+                # od2_out = ("".join(map(str, o2_dat)))
+                # od3_out = ("".join(map(str, o3_dat)))
+
+                save_data = email_fullcontact_db(other_details=(o1_dat, o2_dat, o3_dat))
+                save_data.save()
+        except Exception as error:
+            print error
+
+        # print "Photos:"
+        for x in data.get("photos", ""):
+            ph_dat = x.get('url', '')
+            # ph_out = ("".join(map(str, ph_dat)))
+            save_data = email_fullcontact_db(photos=(ph_dat))
+            save_data.save()
+
+    except Exception as error:
+        print error
+
+
 def run_dat(request):
     whoisinfo_db.objects.all().delete()
     domain_censys_db.objects.all().delete()
@@ -225,27 +306,42 @@ def run_dat(request):
     domain_wappalyzers_db.objects.all().delete()
     domain_wikileaks_db.objects.all().delete()
     domain_zoomeyes_db.objects.all().delete()
+    email_fullcontact_db.objects.all().delete()
 
     if request.method == 'GET':
         search_text = request.GET.get('search_text')
     else:
         search_text = ''
 
-    ip_addr = domaintoip(search_text)
+    if re.match('[^@]+@[^@]+\.[^@]+', search_text):
+        email_full(search_text)
 
-    domain_dns_records(search_text)
-    domain_page_links(search_text)
-    domain_censys(search_text)
-    domain_zoomeye(search_text)
-    domain_wikileaks(search_text)
-    domain_whois(ip_addr)
-    domain_wappalyzer(search_text)
-    domain_shodan(search_text)
-    domain_subdomains(search_text)
+        email_data = email_fullcontact_db.objects.all()
 
-    whois_data = whoisinfo_db.objects.all()
+        return render(request, 'datasploit/email.html', {'email_data': email_data})
 
-    return render(request, 'datasploit/whois.html', {'whois_data': whois_data})
+    else:
+        ip_addr = domaintoip(search_text)
+
+        domain_dns_records(search_text)
+        domain_page_links(search_text)
+        domain_censys(search_text)
+        domain_zoomeye(search_text)
+        domain_wikileaks(search_text)
+        domain_whois(ip_addr)
+        domain_wappalyzer(search_text)
+        domain_shodan(search_text)
+        domain_subdomains(search_text)
+
+        whois_data = whoisinfo_db.objects.all()
+
+        return render(request, 'datasploit/whois.html', {'whois_data': whois_data})
+
+
+def email_url(request):
+    email_data = email_fullcontact_db.objects.all()
+
+    return render(request, 'datasploit/email.html', {'email_data': email_data})
 
 
 def dnsrecords_url(request):

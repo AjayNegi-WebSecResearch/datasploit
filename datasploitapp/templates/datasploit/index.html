@@ -33,16 +33,19 @@
                     <img width="55%" class="paper" src="/static/datasploit.png">
                 </div>
                 <form method="get" action="/rundata/">
-                    <div class="input-group">
+                    <div class="lst-c">
                         <input type="text" id="search" name="search_text" class="form-control input-lg"
                                value="{{ search_text }}" aria-label="..." autofocus="" action="">
-                        <div class="input-group-btn">
-                            <button type="submit" class="btn btn-lg btn-primary">
-                                Search <span class="caretpadding"></span>
-                            </button>
-
-                        </div>
                     </div>
+                    <center>
+                        <div><br/></div>
+                        <button type="submit" class="btn btn-default btn-lg">
+                            Domain Search <span class="caretpadding"></span>
+                        </button>
+                        <button type="submit" class="btn btn-default btn-lg">
+                            Email Search <span class="caretpadding"></span>
+                        </button>
+                    </center>
                 </form>
                 <div class="index-text"></div>
             </div>
@@ -77,6 +80,8 @@
     $(document).ready(function(){
         $('[data-toggle="tooltip"]').tooltip();
     });
+
+
 
 
 </script>

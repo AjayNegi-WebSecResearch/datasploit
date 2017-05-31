@@ -15,5 +15,6 @@ urlpatterns = [
     url(r'^zoomeye/', views.zoomeye_url, name='zoomeye'),
     url(r'^subdomains/', views.subdomain_url, name='subdomain'),
     url(r'^censys/', views.censys_url, name='censys'),
+    url(r'^email/', views.email_url, name='email'),
 
 ]
