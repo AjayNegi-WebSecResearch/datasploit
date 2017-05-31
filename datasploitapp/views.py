@@ -225,8 +225,8 @@ def email_full(email):
         if data.get("status", "") == 200:
             if data.get("contactInfo", "") != "":
                 n_dat = data.get("contactInfo", "").get('fullName', '')
-                save_data = email_fullcontact_db(name=(n_dat))
-                save_data.save()
+            save_data = email_fullcontact_db(name=(n_dat))
+            save_data.save()
         # print "\nOrganizations:"
         for x in data.get("organizations", ""):
             if x.get('isPrimary', '') == True:
