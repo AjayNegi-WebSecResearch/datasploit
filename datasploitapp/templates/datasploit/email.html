@@ -15,13 +15,13 @@
             </div>
             <div class="col-lg-12">
                 <!--<a href="/admin/datasploitapp/domain_pagelinks_db/export/?" class="btn btn-info" role="button"-->
-                   <!--style="position: absolute;-->
-    <!--right: 0px; top: 20px" type="button">Download Pagelinks Data</a>-->
+                <!--style="position: absolute;-->
+                <!--right: 0px; top: 20px" type="button">Download Pagelinks Data</a>-->
                 <div>
                     <div id="results">
 
                         <div class="result">
-                            <div class="result-metadata">
+                            <ul class="result-metadata">
                                 <h9>Name :</h9>
                                 <ul>
                                     {% for data in email_data %}
@@ -34,18 +34,47 @@
                                     {{data.organizations}}
                                     {% endfor %}
                                 </ul>
+                                <h9>Web Link :</h9>
+                                <ul>
+                                    {% for data in email_data %}
+                                    {{data.web}}
+                                    {% endfor %}
+                                </ul>
                                 <h9>Social Profiles :</h9>
                                 <ul>
                                     {% for data in email_data %}
-                                    <li>{{data.social_profile}}</li>
+                                {{data.social_profile_name}}
                                     {% endfor %}
+                                    <code>{% for data in email_data %}</code>
+                                {{data.social_profile}}
+                                <br>
+                                {% endfor %}
                                 </ul>
+                                <h9>Chat Data :</h9>
+                                <!--<ul>-->
+                                <!--{% for data in email_data %}-->
+                                <!--<li>{{data.chats}}</li>-->
+                                <!--{% endfor %}-->
+                                <!--</ul>-->
+                                </br>
                                 <h9>Other Details :</h9>
+                                </br>
+                                <h9>Gender :</h9>
                                 <ul>
                                     {% for data in email_data %}
-                                    {{data.other_details}}
+                                    {{data.gender}}
                                     {% endfor %}
                                 </ul>
+                                <h10>Country :</h10>
+                                {% for data in email_data %}
+                                {{data.country}}
+                                {% endfor %}
+                                </br>
+                                <h10>City :</h10>
+                                {% for data in email_data %}
+                                {{data.city}}
+                                {% endfor %}
+                                </br>
                                 <h9>Photos :</h9>
                                 <ul>
                                     {% for data in email_data %}

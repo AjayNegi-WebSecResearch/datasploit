@@ -95,6 +95,13 @@ class domain_censys_db(models.Model):
 class email_fullcontact_db(models.Model):
     name = models.TextField(blank=True)
     organizations = models.TextField(blank=True)
+    web = models.TextField(blank=True)
+    chats = models.TextField(blank=True)
     social_profile = models.TextField(blank=True)
+    social_profile_name = models.TextField(blank=True)
+    social_profile_data = models.TextField(blank=True)
     other_details = models.TextField(blank=True)
     photos = models.TextField(blank=True)
+    gender = models.TextField(blank=True)
+    country = models.TextField(blank=True)
+    city = models.TextField(blank=True)

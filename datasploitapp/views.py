@@ -225,8 +225,8 @@ def email_full(email):
         if data.get("status", "") == 200:
             if data.get("contactInfo", "") != "":
                 n_dat = data.get("contactInfo", "").get('fullName', '')
-                save_data = email_fullcontact_db(name=(n_dat))
-                save_data.save()
+        save_data = email_fullcontact_db(name=(n_dat))
+        save_data.save()
         # print "\nOrganizations:"
         for x in data.get("organizations", ""):
             if x.get('isPrimary', '') == True:
@@ -234,41 +234,43 @@ def email_full(email):
             else:
                 primarycheck = ""
             if x.get('endDate', '') == '':
-                org_dat = (
-                    x.get('title', ''), x.get('name', ''), x.get('startDate', ''), primarycheck)
-                org_out = ("".join(map(str, org_dat)))
-                save_data = email_fullcontact_db(organizations=(org_out))
+                org_dat = "\t%s at %s - (From %s to Unknown Date)%s" % (
+                    x.get('title', ''), x.get(' name', ''), x.get('startDate', ''), primarycheck)
+                # org_out = ("".join(map(str, org_dat)))
+                save_data = email_fullcontact_db(organizations=(org_dat))
                 save_data.save()
             else:
-                org2_dat = (
+                org2_dat = "\t%s - (From %s to %s)%s" % (
                     x.get('name', ''), x.get('startDate', ''), x.get('endDate', ''), primarycheck)
-                org2_out = ("".join(map(str, org2_dat)))
-                save_data = email_fullcontact_db(organizations=(org2_out))
+                save_data = email_fullcontact_db(organizations=(org2_dat))
                 save_data.save()
         if data.get("contactInfo", "") != "":
             if data.get("contactInfo", "").get('websites', '') != "":
                 # print "\nWebsite(s):"
                 for x in data.get("contactInfo", "").get('websites', ''):
                     web_dat = x.get('url', '')
-                    save_data = email_fullcontact_db(name=(web_dat))
+                    save_data = email_fullcontact_db(web=(web_dat))
                     save_data.save()
             if data.get("contactInfo", "").get('chats', '') != "":
                 # print '\nChat Accounts'
                 for x in data.get("contactInfo", "").get('chats', ''):
                     chat_dat = (x.get('handle', ''), x.get('client', ''))
-                    save_data = email_fullcontact_db(name=(chat_dat))
+                    save_data = email_fullcontact_db(chats=(chat_dat))
                     save_data.save()
 
         # print "\nSocial Profiles:"
         for x in data.get("socialProfiles", ""):
-            # print "\t%s:" % x.get('type', '').upper()
+            so = "%s:" % x.get('type').upper()
+            save_data = email_fullcontact_db(social_profile_name=(so))
+            save_data.save()
             for y in x.keys():
                 if y != 'type' and y != 'typeName' and y != 'typeId':
-                    soc_dat = (y, x.get(y, ''))
-                    soc_out = ("".join(map(str, soc_dat)))
-                    save_data = email_fullcontact_db(social_profile=(soc_out))
+                    soc_dat = '%s: %s' % (y, x.get(y))
+                    save_data = email_fullcontact_db(social_profile=(soc_dat))
                     save_data.save()
-                    # print ''
+            # fo = ''
+            # save_data = email_fullcontact_db(social_profile_data=(fo))
+            # save_data.save()
 
         # print "Other Details:"
         try:
@@ -276,11 +278,12 @@ def email_full(email):
                 o1_dat = data.get("demographics", "").get('gender', '')
                 o2_dat = data.get("demographics", "").get('country', '')
                 o3_dat = data.get("demographics", "").get('locationGeneral', '')
+
                 # od1_out = ("".join(map(str, o1_dat)))
                 # od2_out = ("".join(map(str, o2_dat)))
                 # od3_out = ("".join(map(str, o3_dat)))
 
-                save_data = email_fullcontact_db(other_details=(o1_dat, o2_dat, o3_dat))
+                save_data = email_fullcontact_db(gender=(o1_dat), country=(o2_dat), city=(o3_dat))
                 save_data.save()
         except Exception as error:
             print error
@@ -340,7 +343,7 @@ def run_dat(request):
 
 def email_url(request):
     email_data = email_fullcontact_db.objects.all()
-    paginator = Paginator(email_data, 20)
+    paginator = Paginator(email_data, 20000)
 
     page = request.GET.get('page')
     try:
