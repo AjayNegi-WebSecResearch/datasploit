@@ -54,15 +54,15 @@ Options:
 
 ```
 
-![alt text](https://raw.githubusercontent.com/anandtiwarics/datasploit/master/GUI%20Photo/datasploit.PNG)
+![alt text](https://raw.githubusercontent.com/anandtiwarics/datasploit/master/GUI%20Photos/datasploit.PNG)
 
 
-![alt text](https://raw.githubusercontent.com/anandtiwarics/datasploit/master/GUI%20Photo/shodan.png)
+![alt text](https://raw.githubusercontent.com/anandtiwarics/datasploit/master/GUI%20Photos/shodan.png)
 
 
-![alt text](https://raw.githubusercontent.com/anandtiwarics/datasploit/master/GUI%20Photo/subdomain.png)
+![alt text](https://raw.githubusercontent.com/anandtiwarics/datasploit/master/GUI%20Photos/subdomain.png)
 
 
-![alt text](https://raw.githubusercontent.com/anandtiwarics/datasploit/master/GUI%20Photo/wikileaks.png)
+![alt text](https://raw.githubusercontent.com/anandtiwarics/datasploit/master/GUI%20Photos/wikileaks.png)
 
 
