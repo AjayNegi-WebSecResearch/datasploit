@@ -54,6 +54,11 @@ Options:
 
 ```
 
+
+![image alt text](https://raw.githubusercontent.com/anandtiwarics/datasploit/master/GUI%20Photos/youtub%20link.png)
+
+[link text](https://www.youtube.com/watch?v=1W3AjjQ_P3s "GUI Walkthrough Video")
+
 ![alt text](https://raw.githubusercontent.com/anandtiwarics/datasploit/master/GUI%20Photos/datasploit.PNG)
 
 
