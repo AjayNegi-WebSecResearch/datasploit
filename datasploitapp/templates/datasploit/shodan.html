@@ -30,10 +30,11 @@
                 <a href="/admin/datasploitapp/domain_shodans_db/export/?" class="btn btn-info" role="button" style="position: absolute;
     right: 0px; top: 20px" type="button">Download Shodan Data</a>
                 <div>
-                    <div class="search-result">
+                    <div class="result">
                         {% for data in shodan_data %}
-                        <code class="detail">{{data.host}}</code>
-                        <code class="detail">{{data.domain}}</code>
+                        <div class="ip">{{data.ip}}</div>
+                        <pre class="detail">{{data.host}}</pre>
+                        <pre class="detail">{{data.domain}}</pre>
                         <pre class="detail">Port:{{data.port}}</pre>
                         <pre class="detail"><code>{{data.data}}</code></pre>
                         <div class="">
