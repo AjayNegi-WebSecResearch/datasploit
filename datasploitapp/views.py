@@ -1,25 +1,29 @@
 # from django.shortcuts import render_to_response
 import json
+import socket
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render
 from ipwhois import IPWhois
-from domain_censys import censys_search, censys_list
-from domain_dnsrecords import fetch_dns_records
-from domain_pagelinks import pagelinks
-from domain_shodan import shodandomainsearch
-from domain_subdomains import subdomains, subdomains_from_netcraft, subdomain_list
-from domain_wappalyzer import wappalyzeit
-from domain_wikileaks import wikileaks
-from domain_zoomeye import search_zoomeye
-from ip_shodan import domaintoip
-from email_fullcontact import fullcontact
 from .models import whoisinfo_db, domain_censys_db, domain_dnsrecords_db, domain_pagelinks_db, domain_shodans_db, \
     domain_subdomains_db, domain_wappalyzers_db, domain_wikileaks_db, domain_zoomeyes_db, email_fullcontact_db
-from email_basic_checks import basic_checks
+from domain import domain_censys, domain_pagelinks, domain_dnsrecords, domain_shodan, domain_wappalyzer, \
+    domain_wikileaks \
+    , domain_zoomeye, domain_emailhunter, domain_subdomains, domain_whois
+from ip import ip_shodan
+from emails import email_fullcontact, email_basic_checks, email_clearbit, email_haveibeenpwned, email_pastes, \
+    email_scribd \
+    , email_slideshare, email_whoismind
 
 import re
 
+subdomain_list = []
+censys_list = []
+
 dict_to_apend = {}
+
+
+def domaintoip(domain):
+    return socket.gethostbyname(domain)
 
 
 def index(request):
@@ -28,38 +32,38 @@ def index(request):
 
 def domain_dns_records(domain):
     try:
-        soa_records = fetch_dns_records(domain, 'SOA')
+        soa_records = domain_dnsrecords.fetch_dns_records(domain, 'SOA')
         print soa_records
         soa_out = ("".join(map(str, soa_records)))
         save_data = domain_dnsrecords_db(soa_records=soa_out)
         save_data.save()
 
-        mx_records = fetch_dns_records(domain, 'MX')
+        mx_records = domain_dnsrecords.fetch_dns_records(domain, 'MX')
         mx_out = ("".join(map(str, mx_records)))
         save_data = domain_dnsrecords_db(mx_records=mx_out)
         save_data.save()
 
-        txt_records = fetch_dns_records(domain, 'TXT')
+        txt_records = domain_dnsrecords.fetch_dns_records(domain, 'TXT')
         txt_out = ("".join(map(str, txt_records)))
         save_data = domain_dnsrecords_db(txt_records=txt_out)
         save_data.save()
 
-        a_records = fetch_dns_records(domain, 'A')
+        a_records = domain_dnsrecords.fetch_dns_records(domain, 'A')
         a_out = ("".join(map(str, a_records)))
         save_data = domain_dnsrecords_db(a_records=a_out)
         save_data.save()
 
-        name_server_records = fetch_dns_records(domain, 'NS')
+        name_server_records = domain_dnsrecords.fetch_dns_records(domain, 'NS')
         name_out = ("".join(map(str, name_server_records)))
         save_data = domain_dnsrecords_db(name_server_records=name_out)
         save_data.save()
 
-        cname_records = fetch_dns_records(domain, 'CNAME')
+        cname_records = domain_dnsrecords.fetch_dns_records(domain, 'CNAME')
         cname_out = ("".join(map(str, cname_records)))
         save_data = domain_dnsrecords_db(cname_records=cname_out)
         save_data.save()
 
-        aaaa_records = fetch_dns_records(domain, 'AAAA')
+        aaaa_records = domain_dnsrecords.fetch_dns_records(domain, 'AAAA')
         print aaaa_records
         aaaa_out = ("".join(map(str, aaaa_records)))
         save_data = domain_dnsrecords_db(aaaa_records=aaaa_out)
@@ -71,7 +75,7 @@ def domain_dns_records(domain):
 
 def domain_page_links(domain):
     try:
-        pagelinks_records = pagelinks(domain)
+        pagelinks_records = domain_pagelinks.pagelinks(domain)
         pagelinks_records = set(pagelinks_records)
         for x in pagelinks_records:
             print x
@@ -81,9 +85,9 @@ def domain_page_links(domain):
         print error
 
 
-def domain_shodan(domain):
+def domains_shodan(domain):
     try:
-        data = json.loads(shodandomainsearch(domain))
+        data = json.loads(domain_shodan.shodandomainsearch(domain))
 
         if 'matches' in data.keys():
 
@@ -108,10 +112,10 @@ def domain_shodan(domain):
         print error
 
 
-def domain_subdomains(domain):
+def domains_subdomains(domain):
     try:
-        subdomains(domain)
-        subdomains_from_netcraft(domain)
+        domain_subdomains.subdomains(domain, subdomain_list)
+        domain_subdomains.subdomains_from_netcraft(domain, subdomain_list)
         if len(subdomain_list) >= 1:
             for sub in subdomain_list:
                 print sub
@@ -126,10 +130,10 @@ def domain_subdomains(domain):
         print error
 
 
-def domain_wappalyzer(domain):
+def domains_wappalyzer(domain):
     try:
         targeturl = "http://" + domain
-        data = wappalyzeit(targeturl)
+        data = domain_wappalyzer.wappalyzeit(targeturl)
         data_out = ("".join(map(str, data)))
         save_data = domain_wappalyzers_db(domain_wappalyzer=(data_out))
         save_data.save()
@@ -139,14 +143,14 @@ def domain_wappalyzer(domain):
         save_data.save()
     try:
         targeturl = "https://" + domain
-        wappalyzeit(targeturl)
+        domain_wappalyzer.wappalyzeit(targeturl)
     except:
         data = " HTTPS connection was unavailable"
         save_data = domain_wappalyzers_db(domain_wappalyzer=(data))
         save_data.save()
 
 
-def domain_whois(domain):
+def domains_whois(domain):
     try:
         ip_addr = domaintoip(domain)
         data = IPWhois(ip_addr)
@@ -169,9 +173,9 @@ def domain_whois(domain):
         print error
 
 
-def domain_wikileaks(domain):
+def domains_wikileaks(domain):
     try:
-        wikileaks_records = wikileaks(domain)
+        wikileaks_records = domain_wikileaks.wikileaks(domain)
         for tl, lnk in wikileaks_records.items():
             print lnk
             print tl
@@ -181,9 +185,9 @@ def domain_wikileaks(domain):
         print error
 
 
-def domain_zoomeye(domain):
+def domains_zoomeye(domain):
     try:
-        data = search_zoomeye(domain)
+        data = domain_zoomeye.search_zoomeye(domain)
         dict_zoomeye_results = json.loads(data)
         if 'matches' in dict_zoomeye_results.keys():
             print len(dict_zoomeye_results['matches'])
@@ -205,9 +209,9 @@ def domain_zoomeye(domain):
         print error
 
 
-def domain_censys(domain):
+def domains_censys(domain):
     try:
-        censys_search(domain)
+        domain_censys.censys_search(domain)
         if len(censys_list) >= 1:
             dict_to_apend['censys'] = censys_list
             for x in censys_list:
@@ -221,7 +225,7 @@ def domain_censys(domain):
 
 def email_full(email):
     try:
-        data = fullcontact(email)
+        data = email_fullcontact.main(email)
         if data.get("status", "") == 200:
             if data.get("contactInfo", "") != "":
                 n_dat = data.get("contactInfo", "").get('fullName', '')
@@ -268,9 +272,9 @@ def email_full(email):
                     soc_dat = '%s: %s' % (y, x.get(y))
                     save_data = email_fullcontact_db(social_profile=(soc_dat))
                     save_data.save()
-            # fo = ''
-            # save_data = email_fullcontact_db(social_profile_data=(fo))
-            # save_data.save()
+                    # fo = ''
+                    # save_data = email_fullcontact_db(social_profile_data=(fo))
+                    # save_data.save()
 
         # print "Other Details:"
         try:
@@ -328,13 +332,13 @@ def run_dat(request):
 
         domain_dns_records(search_text)
         domain_page_links(search_text)
-        domain_censys(search_text)
-        domain_zoomeye(search_text)
-        domain_wikileaks(search_text)
-        domain_whois(ip_addr)
-        domain_wappalyzer(search_text)
-        domain_shodan(search_text)
-        domain_subdomains(search_text)
+        domains_censys(search_text)
+        domains_zoomeye(search_text)
+        domains_wikileaks(search_text)
+        domains_whois(ip_addr)
+        domains_wappalyzer(search_text)
+        domains_shodan(search_text)
+        domains_subdomains(search_text)
 
         whois_data = whoisinfo_db.objects.all()
 
