@@ -5,10 +5,11 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render
 from ipwhois import IPWhois
 from .models import whoisinfo_db, domain_censys_db, domain_dnsrecords_db, domain_pagelinks_db, domain_shodans_db, \
-    domain_subdomains_db, domain_wappalyzers_db, domain_wikileaks_db, domain_zoomeyes_db, email_fullcontact_db
+    domain_subdomains_db, domain_wappalyzers_db, domain_wikileaks_db, domain_zoomeyes_db, email_fullcontact_db\
+    , punkspider_db
 from domain import domain_censys, domain_pagelinks, domain_dnsrecords, domain_shodan, domain_wappalyzer, \
     domain_wikileaks \
-    , domain_zoomeye, domain_emailhunter, domain_subdomains, domain_whois
+    , domain_zoomeye, domain_emailhunter, domain_subdomains, domain_whois, domain_checkpunkspider
 from ip import ip_shodan
 from emails import email_fullcontact, email_basic_checks, email_clearbit, email_haveibeenpwned, email_pastes, \
     email_scribd \
@@ -303,6 +304,28 @@ def email_full(email):
         print error
 
 
+def punkspider(domain):
+    try:
+        result = domain_checkpunkspider.main(domain)
+        if result is not None:
+            if 'data' in result.keys() and len(result['data']) >= 1:
+                for x in result['data']:
+                    print "==> ", x['bugType']
+                    types = x['bugType']
+                    print "Method:", x['verb'].upper()
+                    methods = x['verb'].upper()
+                    print "URL:\n" + x['vulnerabilityUrl']
+                    urls = x['vulnerabilityUrl']
+                    print "Param:", x['parameter']
+                    params = x['parameter']
+                    save_data = punkspider_db(type=(types), method=(methods), url=(urls), param=(params))
+                    save_data.save()
+            else:
+                print "No result found"
+    except Exception as e:
+        print e
+
+
 def run_dat(request):
     whoisinfo_db.objects.all().delete()
     domain_censys_db.objects.all().delete()
@@ -314,6 +337,7 @@ def run_dat(request):
     domain_wikileaks_db.objects.all().delete()
     domain_zoomeyes_db.objects.all().delete()
     email_fullcontact_db.objects.all().delete()
+    punkspider_db.objects.all().delete()
 
     if request.method == 'GET':
         search_text = request.GET.get('search_text')
@@ -339,6 +363,7 @@ def run_dat(request):
         domains_wappalyzer(search_text)
         domains_shodan(search_text)
         domains_subdomains(search_text)
+        punkspider(search_text)
 
         whois_data = whoisinfo_db.objects.all()
 
@@ -498,3 +523,20 @@ def censys_url(request):
         censys_data = paginator.page(paginator.num_pages)
 
     return render(request, 'datasploit/censys.html', {'censys_data': censys_data})
+
+
+def punkspider_url(request):
+    punkspider_data = punkspider_db.objects.all()
+
+    paginator = Paginator(punkspider_data, 20)
+
+    page = request.GET.get('page')
+    try:
+        punkspider_data = paginator.page(page)
+    except PageNotAnInteger:
+        punkspider_data = paginator.page(1)
+    except EmptyPage:
+        punkspider_data = paginator.page(paginator.num_pages)
+
+    return render(request, 'datasploit/punkspider.html', {'punkspider_data': punkspider_data})
+

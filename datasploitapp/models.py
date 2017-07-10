@@ -105,3 +105,10 @@ class email_fullcontact_db(models.Model):
     gender = models.TextField(blank=True)
     country = models.TextField(blank=True)
     city = models.TextField(blank=True)
+
+
+class punkspider_db(models.Model):
+    type = models.TextField(blank=True)
+    method = models.TextField(blank=True)
+    url = models.TextField(blank=True)
+    param = models.TextField(blank=True)
